@@ -178,6 +178,7 @@ class DDPGPolicy(BasePolicy):
         if self._noise is None:
             return act
         if isinstance(act, np.ndarray):
-            return act + self._noise(act.shape)
+            # add noise and then clip to make sure action is in [-1; 1]
+            return np.clip(act + self._noise(act.shape), -1, 1)
         warnings.warn("Cannot add exploration noise to non-numpy_array action.")
         return act
